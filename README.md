@@ -1,7 +1,11 @@
-# ARMACHAT - My network = my rules, no borders, no limits, no operators.
+# ARMACHAT
+# My network = my rules, no borders, no limits, no operators.
 
 Standalone Doomsday LORA QWERTY communicator
-How to restore communication after disaster or Armageddon ? It is just hi-tech walkie talkie for fun :)
+
+How to restore communication after disaster or Armageddon ? 
+
+It is just hi-tech walkie talkie for fun :)
 
 # Hardware features:
 
