@@ -1,0 +1,1 @@
+As the PCB has the rear exposed it is possible to short circuit the buttons with your fingers (particularly if it is hot and humid).  This does not result in any pain or damage to the circuitry, just annoying accidental key presses.  The case design is a slim, minimalist rear skin that slides on and provides a basic level of protection.
