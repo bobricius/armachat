@@ -340,6 +340,7 @@ case 1:
       if (key=='b'){ee.brightness=menuUp(1,5,ee.brightness);  analogWrite(TFT_BACKLIGHT,  map(ee.brightness, 1, 5, 1, 255));} // Backlight on
       break;
     case 3://sound  
+      if (key=='b') {ee.sound = (ee.sound + 1) % 2;}
       break;
   }
 
@@ -1117,6 +1118,9 @@ beep();
 
 
 void playTone(long duration, int freq) {
+  if (ee.sound == 0) {
+    return;
+  }
 // duration in mSecs, frequency in hertz
 
 //  duration *= 10;
