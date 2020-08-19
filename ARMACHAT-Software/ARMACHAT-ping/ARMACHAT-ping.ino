@@ -340,7 +340,7 @@ case 1:
       if (key=='b'){ee.brightness=menuUp(1,5,ee.brightness);  analogWrite(TFT_BACKLIGHT,  map(ee.brightness, 1, 5, 1, 255));} // Backlight on
       break;
     case 3://sound  
-      if (key=='b') {ee.sound = (ee.sound + 1) % 2;}
+      if (key=='b') {ee.sound = menuUp(0,1,ee.sound);}
       break;
   }
 
