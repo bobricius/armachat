@@ -340,6 +340,7 @@ case 1:
       if (key=='b'){ee.brightness=menuUp(1,5,ee.brightness);  analogWrite(TFT_BACKLIGHT,  map(ee.brightness, 1, 5, 1, 255));} // Backlight on
       break;
     case 3://sound  
+      if (key=='b') {ee.sound = menuUp(0,1,ee.sound);}
       break;
   }
 
@@ -420,146 +421,115 @@ case 5:
 //***********************************************************
 
 }
-byte displayMemory () //String editorText
-{
-if (msgIndex==0) return 1;
+byte displayMemory() { //String editorText
+  if (msgIndex==0) 
+    return 1;
 
-int mi = msgIndex-1; 
-byte exit = 1; 
+  int mi = msgIndex-1; 
+  byte exit = 1; 
 
-char key = 0;
+  char key = 0;
   memoryScreen(mi);
-while (exit)
-{
-key = directLayout.getKey();;     
-  if (key == ' ') {
-  clearScreen(); 
-  key = 0;
-  return 1;
+  while (exit) {
+    key = directLayout.getKey();;     
+    if (key == ' ') {
+      clearScreen(); 
+      key = 0;
+      return 1;
+    }
+    if (key == KEY_DELETE) {
+      if (mi > 0) mi--;
+      memoryScreen(mi);
+    }
+  
+    if (key == KEY_RETURN) {
+      if (mi < msgIndex) mi++;
+      memoryScreen(mi);
+    }
+  }
+  return 0;
 }
 
-            
-     if (key == KEY_DELETE) {
-if (mi > 0) mi--;
-  memoryScreen(mi);
-      }
-      
-      if (key == KEY_RETURN) {
-if (mi < msgIndex) mi++;
-  memoryScreen(mi);
-      }
-
-
-
-}
-return 0;
-
-}
-
-byte menuEditor () //String editorText
-{
-char key = 0; 
-byte exit = 1; 
-
-key = getKey();
-clearScreen();
-editorScreen(editorText,cursor);
-
-while (exit)
-{
-key = getKey();     
-  if (key == KEY_RETURN) {
+byte menuEditor() { //String editorText
+  char key = 0; 
+  byte exit = 1;
+  key = getKey();
   clearScreen();
-  tft.fillRoundRect(0, 0, 160, 128, 8, blue);
-  tft.drawRoundRect(0, 0, 160, 128, 8, white);
-  tft.setFont(&FreeMono9pt7b); // &Org_01 &FreeMono9pt7b
+  editorScreen(editorText,cursor);
 
-  tft.setCursor(10, 30);
-  tft.setTextSize(1);
-  tft.setTextColor(white); 
-  tft.println(" Send ?");
-  tft.println(" .");
-  tft.println(" ENTER = YES");
-  tft.println(" DELETE = NO");   
+  while (exit) {
+    key = getKey();     
+    if (key == KEY_RETURN) {
+      clearScreen();
+      tft.fillRoundRect(0, 0, 160, 128, 8, blue);
+      tft.drawRoundRect(0, 0, 160, 128, 8, white);
+      tft.setFont(&FreeMono9pt7b); // &Org_01 &FreeMono9pt7b
+      tft.setCursor(10, 30);
+      tft.setTextSize(1);
+      tft.setTextColor(white); 
+      tft.println(" Send ?");
+      tft.println(" .");
+      tft.println(" ENTER = YES");
+      tft.println(" DELETE = NO");   
 
- if (waitKey()==1)
- {
-  clearScreen();    
-  return 1;
-}
-  clearScreen();
-  key = 0; 
+      char send = -1;
+      while (send != 0 && send != 1) {
+        send = waitKey();
+        if (send == 1)  
+          return 1;
       }
-     if ((key == KEY_DELETE) && (cursor==0)) {
-return 0;
-//  return 1;
+      clearScreen();
+      editorScreen(editorText,cursor);
+      key = 0; 
+    }
+    if ((key == KEY_DELETE) && (cursor==0)) {
+      return 0;
+    }          
+    if (key == KEY_LEFT) {
+      if (cursor > 0) 
+        cursor--;
+      key = 0;
+      editorScreen(editorText,cursor);
+    }    
+    if (key == KEY_RIGHT) {
+      if (cursor < (editorText.length())) cursor++;
+        key = 0;
+        editorScreen(editorText,cursor);
       }
-            
-     if (key == KEY_LEFT) {
-if (cursor > 0) cursor--;
-          key = 0;
-            editorScreen(editorText,cursor);
-      }
-      
-      if (key == KEY_RIGHT) {
-if (cursor < (editorText.length())) cursor++;
-          key = 0;
-          editorScreen(editorText,cursor);
-      }
-
-      if (key == KEY_DELETE) {
-       if (cursor > 0) cursor--;
-          key = 0;       
+    if (key == KEY_DELETE) {
+      if (cursor > 0) 
+          cursor--;
+      key = 0;       
       editorText.remove(cursor, 1);
       editorScreen(editorText,cursor);
-      }
+    }
+    if (key) {
+      byte l=editorText.length();
+      editorText=editorText.substring(0, cursor) + key + editorText.substring(cursor, l);
+      cursor++; 
+      editorScreen(editorText,cursor);
+    }
 
-  if (key) {
-
-    byte l=editorText.length();
-    editorText=editorText.substring(0, cursor)+key+editorText.substring(cursor,l);
-    cursor++;
-//      playTone( 5, 500); 
-    editorScreen(editorText,cursor);
-//      playTone( 5, 1000);
-}
-///if (key=='m'){displayMemory();
-
-int unread = countUnread();
-if ((unread)>0) {
-//  tft.print("NEW:"); 
-//  tft.print(unread);
-  playTone( 5, 4000);
-  displayMemory(); 
-  clearScreen();
-  editorScreen(editorText,cursor); //refresh screen
-}
-
-
-// if (incoming != "")
-// {
-//  displayMessage(incoming);
-//  waitKey();
-//  clearScreen();
-//  editorScreen(editorText,cursor);
-//  incoming = "";
-// }
-
-}
-return 0;
+    int unread = countUnread();
+    if ((unread)>0) {
+      playTone( 5, 4000);
+      displayMemory(); 
+      clearScreen();
+      editorScreen(editorText,cursor); //refresh screen
+    }
+  }
+  return 0;
 }
 
 
 //************************************************************************************************
-char getKey ()
-{
-char key=0;  
+char getKey () {
+  char key=0;  
   switch (Layout) {
     case 0:
       key = directLayout.getKey();
       break;
     case 1:
-
       key = shiftLayout.getKey();
       if (key>9){ Layout = 0; }
       break;
@@ -567,8 +537,6 @@ char key=0;
       key = symbolLayout.getKey();
       if (key>9){ Layout = 0; }
       break;
-
-
     default:
       Layout = 0;
       break;
@@ -577,32 +545,29 @@ char key=0;
   if (key == KEY_SHIFT)
   {
     Layout++;
-          if (Layout >= 3) {
-            Layout = 0;
-      }
+    if (Layout >= 3) {
+      Layout = 0;
+    }
     key = 0;
     editorScreen(editorText,cursor);
   }
   return key;  
 }
 
-byte waitKey ()
-{
-char  key = 0;
-while (key == 0)
-{
-  key = directLayout.getKey();
-      if (key == KEY_DELETE) {
+byte waitKey() {
+  char key = 0;
+  while (key == 0) {
+    key = directLayout.getKey();
+    if (key == KEY_DELETE) {
       playTone( 100, 500);  
       return  0;
-      }
-  
-      if (key == KEY_RETURN) {
+    }
+    if (key == KEY_RETURN) {
       playTone( 50, 1000);  
       return  1;
-      }
-}
-return key;
+    }
+  }
+  return key;
 }
 
 int menuUp(int xmin,int xmax, int value )
@@ -666,9 +631,9 @@ int undelivered=0;
   tft.println("RESENDING ..."); 
   tft.setTextColor(white); 
   tft.println("To: ");
-   tft.print(message[i].recipient);
-   tft.print('.');  
-   tft.println(addresBook[message[i].recipient]);
+  tft.print(message[i].recipient);
+  tft.print('.');  
+  tft.println(addresBook[message[i].recipient]);
   tft.setTextColor(yellow);     
 //  sendPacket();
 
@@ -1117,6 +1082,9 @@ beep();
 
 
 void playTone(long duration, int freq) {
+  if (ee.sound == 0) {
+    return;
+  }
 // duration in mSecs, frequency in hertz
 
 //  duration *= 10;
