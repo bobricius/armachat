@@ -1,6 +1,10 @@
 # ARMACHAT
 # My network = my rules, no borders, no limits, no operators.
 
+Full time step by step - soldering, programming, assembly
+
+[![Full time step by step - soldering, programming, assembly](https://img.youtube.com/vi/rp7o7_RdZ8g/0.jpg)](https://www.youtube.com/watch?v=rp7o7_RdZ8g)
+
 Standalone Doomsday LORA QWERTY communicator
 
 How to restore communication after disaster or Armageddon ? 
