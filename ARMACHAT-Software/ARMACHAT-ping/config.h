@@ -20,7 +20,7 @@
 #ifdef FUSION
 // FUSION communicator version with SAMD21E18
 // require samd core from https://github.com/mattairtech/ArduinoCore-samd/tree/master/variants/MT_D21E_revB
-const int csPin = 23;         // LoRa radio chip select
+const int csPin = 23;         // LoRa radio chip select signal
 const int resetPin = -1;       // LoRa radio reset
 const int irqPin = 9;         // change for your board; must be a hardware interrupt pin
 //******************** display
